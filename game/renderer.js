@@ -14,10 +14,15 @@ define(function() {
       this.context.fillRect(0, 0, this.canvasElement.width, this.canvasElement.height);
 
       this.entities.forEach(function(entity) {
+        var aspects = entity.aspects;
+        var transformationAspect = aspects.transformation2D;
         var size = 80;
         this.context.save();
-        this.context.translate(this.canvasElement.width/2, this.canvasElement.height/2);
-        this.context.fillStyle = entity.aspects.shapeRendering.color;
+        this.context.translate(
+          Math.round(transformationAspect.position.get(0)),
+          Math.round(transformationAspect.position.get(1))
+        );
+        this.context.fillStyle = aspects.shapeRendering.color;
         this.context.fillRect(-size*0.5, -size*0.5, size, size);
         this.context.restore();
       }.bind(this));
