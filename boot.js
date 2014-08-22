@@ -6,8 +6,8 @@ require.config({
 
 require(['vendor/domReady', 'game/game'], function(domReady, Game) {
   function initialize() {
-    var game = new Game();
-    var containerElement = document.querySelector('body > .game_container');
+    var game = new Game(window.document);
+    var containerElement = window.document.querySelector('body > .game_container');
     containerElement.appendChild(game.canvasElement);
     game.run();
   }
