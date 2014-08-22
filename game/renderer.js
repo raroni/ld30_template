@@ -20,7 +20,7 @@ define(function() {
         this.context.save();
         this.context.translate(
           Math.round(transformationAspect.position.get(0)),
-          Math.round(transformationAspect.position.get(1))
+          Math.round(transformationAspect.position.get(1))*-1
         );
         this.context.fillStyle = aspects.shapeRendering.color;
         this.context.fillRect(-size*0.5, -size*0.5, size, size);
