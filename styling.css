@@ -1,3 +1,6 @@
 body {
   background: #ccc;
 }
+body > .game_container {
+  text-align: center;
+}

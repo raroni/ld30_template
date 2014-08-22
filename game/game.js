@@ -12,8 +12,7 @@ define([
   './steering_manager'
 ], function(EventBus, Database, Loop, Keyboard, Transformation2DAspect, RigidBodyAspect, PhysicsEngine, Vector2, InputManager, Renderer, SteeringManager) {
   function Game(document) {
-    this.canvasElement = document.createElement('canvas');
-
+    this.setupCanvas();
     var keyboard = new Keyboard(document);
     var eventBus = new EventBus();
     this.database = new Database(eventBus);
@@ -26,6 +25,17 @@ define([
   }
 
   Game.prototype = {
+    setupCanvas: function() {
+      var canvas = document.createElement('canvas');
+      canvas.width = 800*window.devicePixelRatio;
+      canvas.height = 500*window.devicePixelRatio;
+      canvas.style.width = (canvas.width/window.devicePixelRatio) + 'px';
+      canvas.style.height = (canvas.height/window.devicePixelRatio) + 'px';
+      var context = canvas.getContext('2d');
+      context.translate(canvas.width*0.5, canvas.height*0.5);
+      context.scale(window.devicePixelRatio, window.devicePixelRatio*-1);
+      this.canvasElement = canvas;
+    },
     run: function() {
       this.loop.start();
     },
@@ -38,7 +48,6 @@ define([
       player.addAspect('shapeRendering', { color: 'blue' });
 
       var transformationAspect = new Transformation2DAspect();
-      transformationAspect.move(new Vector2(200, -100));
       player.addAspect('transformation2D', transformationAspect);
       player.addAspect('controlable');
       player.addAspect('steering', { direction: Vector2.zero() });
