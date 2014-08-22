@@ -3,6 +3,7 @@ define([
   'lib/valhalla/database',
   'lib/valhalla/loop',
   'lib/valhalla/keyboard',
+  'lib/valhalla/mouse',
   'lib/odin/transformation2d_aspect',
   'lib/odin/rigid_body_aspect',
   'lib/odin/physics/engine',
@@ -12,12 +13,13 @@ define([
   './input_manager',
   './renderer',
   './steering_manager'
-], function(EventBus, Database, Loop, Keyboard, Transformation2DAspect, RigidBodyAspect, PhysicsEngine, AssetRegistry, AssetBundleLoad, Vector2, InputManager, Renderer, SteeringManager) {
-  function Game(document) {
-    this.setupCanvas();
-    var keyboard = new Keyboard(document);
+], function(EventBus, Database, Loop, Keyboard, Mouse, Transformation2DAspect, RigidBodyAspect, PhysicsEngine, AssetRegistry, AssetBundleLoad, Vector2, InputManager, Renderer, SteeringManager) {
+  function Game(window) {
     var eventBus = new EventBus();
     this.eventBus = eventBus;
+    this.setupCanvas(window);
+    new Mouse(window, this.canvasElement, eventBus);
+    var keyboard = new Keyboard(window.document);
     this.database = new Database(eventBus);
     this.loop = new Loop(this);
     this.renderer = new Renderer(eventBus, this.canvasElement);
@@ -30,8 +32,8 @@ define([
   }
 
   Game.prototype = {
-    setupCanvas: function() {
-      var canvas = document.createElement('canvas');
+    setupCanvas: function(window) {
+      var canvas = window.document.createElement('canvas');
       canvas.width = 800*window.devicePixelRatio;
       canvas.height = 500*window.devicePixelRatio;
       canvas.style.width = (canvas.width/window.devicePixelRatio) + 'px';
