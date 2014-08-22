@@ -6,22 +6,27 @@ define([
   'lib/odin/transformation2d_aspect',
   'lib/odin/rigid_body_aspect',
   'lib/odin/physics/engine',
+  'lib/odin/asset_registry',
+  'lib/odin/asset_bundle_load',
   'lib/blaise/vector2',
   './input_manager',
   './renderer',
   './steering_manager'
-], function(EventBus, Database, Loop, Keyboard, Transformation2DAspect, RigidBodyAspect, PhysicsEngine, Vector2, InputManager, Renderer, SteeringManager) {
+], function(EventBus, Database, Loop, Keyboard, Transformation2DAspect, RigidBodyAspect, PhysicsEngine, AssetRegistry, AssetBundleLoad, Vector2, InputManager, Renderer, SteeringManager) {
   function Game(document) {
     this.setupCanvas();
     var keyboard = new Keyboard(document);
     var eventBus = new EventBus();
+    this.eventBus = eventBus;
     this.database = new Database(eventBus);
     this.loop = new Loop(this);
     this.renderer = new Renderer(eventBus, this.canvasElement);
     this.inputManager = new InputManager(eventBus, keyboard);
     this.steeringManager = new SteeringManager(eventBus);
     this.physicsEngine = new PhysicsEngine(eventBus);
+    this.assetRegistry = new AssetRegistry();
     this.setupWorld();
+    this.loadAssets();
   }
 
   Game.prototype = {
@@ -38,6 +43,17 @@ define([
     },
     run: function() {
       this.loop.start();
+    },
+    loadAssets: function() {
+      this.eventBus.subscribe('assetBundleLoadCompletion', this.handleLoadCompletion, this);
+      var load = new AssetBundleLoad(this.assetRegistry, this.eventBus);
+      load.add('assets/images/enemy.png');
+      load.add('assets/images/blue.png');
+      load.add('assets/images/green.png');
+      load.execute();
+    },
+    handleLoadCompletion: function() {
+      this.eventBus.unsubscribe('assetBundleLoadCompletion', this.handleLoadCompletion, this);
     },
     setupWorld: function() {
       this.setupPlayer();
