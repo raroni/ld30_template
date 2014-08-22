@@ -21,18 +21,17 @@ define(function() {
         var transformationAspect = aspects.transformation2D;
         var size = 80;
         this.context.save();
+
         this.context.translate(
           Math.round(transformationAspect.position.get(0)),
           Math.round(transformationAspect.position.get(1))
         );
-        this.context.fillStyle = aspects.shapeRendering.color;
 
-        this.context.fillRect(-size*0.5, -size*0.5, size, size);
-        /*
+        this.context.fillStyle = aspects.shapeRendering.color;
         this.context.beginPath();
         this.context.arc(0, 0, 40, 0, 2*Math.PI);
         this.context.fill();
-        */
+
         this.context.restore();
       }.bind(this));
     },
